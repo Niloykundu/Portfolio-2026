@@ -1,0 +1,250 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ADMIN USER
+// ─────────────────────────────────────────────
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // ADMIN | SUPER_ADMIN
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+// ─────────────────────────────────────────────
+// CATEGORY
+// ─────────────────────────────────────────────
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  sortOrder Int       @default(0)
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// PROJECT
+// ─────────────────────────────────────────────
+model Project {
+  id               String         @id @default(cuid())
+  title            String
+  slug             String         @unique
+  description      String
+  categoryId       String?
+  category         Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  client           String?
+  year             Int?
+  duration         String?
+  role             String?
+  editingApproach  String?
+  caseStudy        String?
+  featured         Boolean        @default(false)
+  published        Boolean        @default(false)
+  sortOrder        Int            @default(0)
+  thumbnailUrl     String?
+  thumbnailPublicId String?
+  media            ProjectMedia[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@map("projects")
+}
+
+// ─────────────────────────────────────────────
+// PROJECT MEDIA
+// ─────────────────────────────────────────────
+model ProjectMedia {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type         String   // IMAGE | VIDEO
+  url          String
+  publicId     String
+  thumbnailUrl String?
+  altText      String?
+  width        Int?
+  height       Int?
+  bytes        Int?
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@map("project_media")
+}
+
+// ─────────────────────────────────────────────
+// STANDALONE MEDIA LIBRARY
+// ─────────────────────────────────────────────
+model Media {
+  id           String   @id @default(cuid())
+  publicId     String   @unique
+  url          String
+  secureUrl    String
+  resourceType String   // image | video | raw
+  format       String?
+  thumbnailUrl String?
+  width        Int?
+  height       Int?
+  bytes        Int?
+  altText      String?
+  folder       String?
+  createdAt    DateTime @default(now())
+
+  @@map("media")
+}
+
+// ─────────────────────────────────────────────
+// SERVICE
+// ─────────────────────────────────────────────
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  icon        String?
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+// ─────────────────────────────────────────────
+// ABOUT
+// ─────────────────────────────────────────────
+model About {
+  id                   String   @id @default(cuid())
+  title                String   @default("ABOUT THE EDITOR")
+  description          String
+  profileImageUrl      String?
+  profileImagePublicId String?
+  yearsExperience      Int      @default(2)
+  projectsCompleted    Int      @default(50)
+  clientsCount         Int      @default(10)
+  toolsCount           Int      @default(5)
+  updatedAt            DateTime @updatedAt
+
+  @@map("about")
+}
+
+// ─────────────────────────────────────────────
+// SOFTWARE / TOOLS
+// ─────────────────────────────────────────────
+model Software {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  logoUrl      String?
+  logoPublicId String?
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("software")
+}
+
+// ─────────────────────────────────────────────
+// SOCIAL LINK
+// ─────────────────────────────────────────────
+model SocialLink {
+  id        String   @id @default(cuid())
+  platform  String
+  label     String
+  url       String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("social_links")
+}
+
+// ─────────────────────────────────────────────
+// SITE SETTINGS (singleton)
+// ─────────────────────────────────────────────
+model SiteSettings {
+  id                 String   @id @default("singleton")
+  siteName           String   @default("Portfolio")
+  editorName         String   @default("Your Name")
+  headline           String   @default("I EDIT STORIES\nTHAT MAKE\nPEOPLE WATCH.")
+  subheadline        String?
+  ctaPrimaryText     String   @default("VIEW MY WORK")
+  ctaSecondaryText   String   @default("LET'S WORK TOGETHER")
+  heroImageUrl       String?
+  heroImagePublicId  String?
+  heroVideoUrl       String?
+  heroVideoPublicId  String?
+  email              String   @default("hello@youremail.com")
+  phone              String?
+  location           String?
+  availabilityStatus Boolean  @default(true)
+  availabilityText   String   @default("AVAILABLE FOR PROJECTS")
+  footerText         String?
+  contactHeadline    String   @default("LET'S MAKE SOMETHING\nWORTH WATCHING.")
+  contactCtaText     String   @default("START A PROJECT")
+  calendlyUrl        String?
+  seoTitle           String?
+  seoDescription     String?
+  ogImageUrl         String?
+  updatedAt          DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ─────────────────────────────────────────────
+// BOOKING (from Calendly webhooks)
+// ─────────────────────────────────────────────
+model Booking {
+  id              String   @id @default(cuid())
+  calendlyEventId String   @unique
+  inviteeId       String?
+  name            String
+  email           String
+  phone           String?
+  eventType       String?
+  eventTypeName   String?
+  scheduledAt     DateTime
+  timezone        String?
+  status          String   @default("ACTIVE") // ACTIVE | CANCELLED | RESCHEDULED | COMPLETED
+  cancelUrl       String?
+  rescheduleUrl   String?
+  meetingNotes    String?
+  rawData         String?  // JSON stored as string in SQLite
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("bookings")
+}
+
+// ─────────────────────────────────────────────
+// CONTACT INQUIRY
+// ─────────────────────────────────────────────
+model ContactInquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  message     String
+  projectType String?
+  budget      String?
+  status      String   @default("UNREAD") // UNREAD | READ | REPLIED | ARCHIVED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("contact_inquiries")
+}
