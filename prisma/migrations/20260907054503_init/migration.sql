@@ -1,27 +1,31 @@
 -- CreateTable
 CREATE TABLE "admin_users" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'ADMIN',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "admin_users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "categories" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "projects" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -37,14 +41,15 @@ CREATE TABLE "projects" (
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "thumbnailUrl" TEXT,
     "thumbnailPublicId" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "projects_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "projects_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "project_media" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "projectId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -55,13 +60,14 @@ CREATE TABLE "project_media" (
     "height" INTEGER,
     "bytes" INTEGER,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "project_media_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "project_media_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "media" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "publicId" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "secureUrl" TEXT NOT NULL,
@@ -73,24 +79,28 @@ CREATE TABLE "media" (
     "bytes" INTEGER,
     "altText" TEXT,
     "folder" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "media_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "services" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
     "icon" TEXT,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "published" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "services_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "about" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL DEFAULT 'ABOUT THE EDITOR',
     "description" TEXT NOT NULL,
     "profileImageUrl" TEXT,
@@ -99,43 +109,47 @@ CREATE TABLE "about" (
     "projectsCompleted" INTEGER NOT NULL DEFAULT 50,
     "clientsCount" INTEGER NOT NULL DEFAULT 10,
     "toolsCount" INTEGER NOT NULL DEFAULT 5,
-    "updatedAt" DATETIME NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "about_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "software" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "logoUrl" TEXT,
     "logoPublicId" TEXT,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "software_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "social_links" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "platform" TEXT NOT NULL,
     "label" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "social_links_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "site_settings" (
-    "id" TEXT NOT NULL PRIMARY KEY DEFAULT 'singleton',
+    "id" TEXT NOT NULL DEFAULT 'singleton',
     "siteName" TEXT NOT NULL DEFAULT 'Portfolio',
     "editorName" TEXT NOT NULL DEFAULT 'Your Name',
-    "headline" TEXT NOT NULL DEFAULT 'I EDIT STORIES
-THAT MAKE
-PEOPLE WATCH.',
+    "headline" TEXT NOT NULL DEFAULT E'I EDIT STORIES\nTHAT MAKE\nPEOPLE WATCH.',
     "subheadline" TEXT,
     "ctaPrimaryText" TEXT NOT NULL DEFAULT 'VIEW MY WORK',
-    "ctaSecondaryText" TEXT NOT NULL DEFAULT 'LET''S WORK TOGETHER',
+    "ctaSecondaryText" TEXT NOT NULL DEFAULT E'LET''S WORK TOGETHER',
     "heroImageUrl" TEXT,
     "heroImagePublicId" TEXT,
     "heroVideoUrl" TEXT,
@@ -146,19 +160,20 @@ PEOPLE WATCH.',
     "availabilityStatus" BOOLEAN NOT NULL DEFAULT true,
     "availabilityText" TEXT NOT NULL DEFAULT 'AVAILABLE FOR PROJECTS',
     "footerText" TEXT,
-    "contactHeadline" TEXT NOT NULL DEFAULT 'LET''S MAKE SOMETHING
-WORTH WATCHING.',
+    "contactHeadline" TEXT NOT NULL DEFAULT E'LET''S MAKE SOMETHING\nWORTH WATCHING.',
     "contactCtaText" TEXT NOT NULL DEFAULT 'START A PROJECT',
     "calendlyUrl" TEXT,
     "seoTitle" TEXT,
     "seoDescription" TEXT,
     "ogImageUrl" TEXT,
-    "updatedAt" DATETIME NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "site_settings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "bookings" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "calendlyEventId" TEXT NOT NULL,
     "inviteeId" TEXT,
     "name" TEXT NOT NULL,
@@ -166,28 +181,32 @@ CREATE TABLE "bookings" (
     "phone" TEXT,
     "eventType" TEXT,
     "eventTypeName" TEXT,
-    "scheduledAt" DATETIME NOT NULL,
+    "scheduledAt" TIMESTAMP(3) NOT NULL,
     "timezone" TEXT,
     "status" TEXT NOT NULL DEFAULT 'ACTIVE',
     "cancelUrl" TEXT,
     "rescheduleUrl" TEXT,
     "meetingNotes" TEXT,
     "rawData" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bookings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "contact_inquiries" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "projectType" TEXT,
     "budget" TEXT,
     "status" TEXT NOT NULL DEFAULT 'UNREAD',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "contact_inquiries_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -204,3 +223,9 @@ CREATE UNIQUE INDEX "media_publicId_key" ON "media"("publicId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "bookings_calendlyEventId_key" ON "bookings"("calendlyEventId");
+
+-- AddForeignKey
+ALTER TABLE "projects" ADD CONSTRAINT "projects_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "project_media" ADD CONSTRAINT "project_media_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects"("id") ON DELETE CASCADE ON UPDATE CASCADE;
