@@ -11,8 +11,7 @@
     "prisma:migrate": "node node_modules/prisma/build/index.js migrate dev",
     "prisma:migrate:prod": "node node_modules/prisma/build/index.js migrate deploy",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:studio": "node node_modules/prisma/build/index.js studio",
-    "setup:admin": "tsx scripts/create-admin.ts"
+    "prisma:studio": "node node_modules/prisma/build/index.js studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -29,7 +28,6 @@
     "@types/node": "^26.4.1",
     "autoprefixer": "^10.5.5",
     "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.11.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "dotenv": "^18.0.4",
@@ -37,7 +35,6 @@
     "jose": "^6.2.12",
     "lucide-react": "^1.41.0",
     "next": "^16.3.4",
-    "next-cloudinary": "^6.18.8",
     "nodemailer": "^10.0.10",
     "postcss": "^8.5.28",
     "prisma": "5.22.0",

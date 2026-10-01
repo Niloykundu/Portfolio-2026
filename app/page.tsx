@@ -20,7 +20,11 @@ async function getPageData() {
       prisma.socialLink.findMany({ orderBy: { sortOrder: "asc" } }),
     ]);
 
-  return { settings, about, categories, services, socialLinks };
+  const hardcodedSocialLinks = [
+    { platform: "LinkedIn", label: "LinkedIn", url: "https://www.linkedin.com/in/niloykundu01/", sortOrder: 1 }
+  ];
+
+  return { settings, about, categories, services, socialLinks: socialLinks.length > 0 ? socialLinks : hardcodedSocialLinks };
 }
 
 export async function generateMetadata(): Promise<Metadata> {
