@@ -43,7 +43,7 @@ I obsess over pacing, colour, and sound design — the invisible craft that make
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Profile Image / Avatar */}
           <div className="relative flex justify-center lg:justify-start">
-            {about.profileImageUrl || "/assets/images/profile.png" ? (
+            {about.profileImageUrl || "/assets/images/normal.png" ? (
               <div className="relative">
                 {/* Glow ring */}
                 <div
@@ -52,7 +52,7 @@ I obsess over pacing, colour, and sound design — the invisible craft that make
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={about.profileImageUrl || "/assets/images/profile.png"}
+                  src={about.profileImageUrl || "/assets/images/normal.png"}
                   alt="Niloy Kundu — Video Editor"
                   className="relative w-full max-w-sm aspect-[4/5] object-cover rounded-2xl"
                   style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)" }}
