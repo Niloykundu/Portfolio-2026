@@ -47,3 +47,4 @@ Thumbs.db
 
 # Prisma migrations (keep migrations, ignore generated client)
 /prisma/generated/
+.neon

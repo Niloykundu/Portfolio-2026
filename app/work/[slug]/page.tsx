@@ -172,6 +172,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                   <video
                     src={v.url}
                     controls
+                    preload="metadata"
                     className="max-h-[80vh] max-w-full w-auto h-auto"
                     poster={v.thumbnailUrl || undefined}
                   />
